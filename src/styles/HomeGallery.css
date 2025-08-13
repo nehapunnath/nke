@@ -1,0 +1,105 @@
+/* Carousel Styles */
+.carousel-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.carousel-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel {
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-card {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.carousel-card img {
+  width: 100%;
+  height: 400px;
+  object-fit: contain;
+  display: block;
+}
+
+.carousel-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
+  z-index: 1;
+}
+
+.carousel-name {
+  position: absolute;
+  top: 70%;
+  right: 50px;
+  transform: translateY(-50%);
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  z-index: 2;
+  opacity: 0;
+  animation: slideUpFadeIn 0.8s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+.carousel-card:nth-child(1) .carousel-name {
+  animation-delay: 0.5s;
+}
+.carousel-card:nth-child(2) .carousel-name {
+  animation-delay: 3.5s;
+}
+.carousel-card:nth-child(3) .carousel-name {
+  animation-delay: 6.5s;
+}
+
+/* Reset animation on new slide */
+.carousel-track {
+  animation: none;
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) translateX(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+.animate-slideUpFadeIn {
+  animation: slideUpFadeIn 0.8s ease-out forwards;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .carousel-card img {
+    height: 300px;
+  }
+  
+  .carousel-name {
+    font-size: 1.8rem;
+    right: 20px;
+  }
+}

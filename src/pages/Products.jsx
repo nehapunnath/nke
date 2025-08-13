@@ -160,11 +160,11 @@ const Products = () => {
     <div className="min-h-screen flex flex-col">
       
       <main className="flex-grow">
-        {/* Hero Section */}
-        <section className="bg-[#ffd2a8] py-16">
+        {/* Hero Section - Changed background color only */}
+        <section className="bg-gradient-to-b from-[#104016] to-white py-16">
           <div className="container mx-auto px-4 text-center">
             <motion.h1 
-              className="text-4xl md:text-5xl font-bold text-[#104016] mb-4"
+              className="text-4xl md:text-5xl font-bold text-[#222222]mb-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
@@ -172,7 +172,7 @@ const Products = () => {
               Our Products
             </motion.h1>
             <motion.p 
-              className="text-xl text-[#425333] max-w-2xl mx-auto"
+              className="text-xl text-[#104016] max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -182,20 +182,10 @@ const Products = () => {
           </div>
         </section>
 
-        {/* Product Filter Section */}
+        {/* Rest of the code remains exactly the same */}
         <section className="py-8 bg-white sticky top-0 z-10 shadow-sm">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              {/* <div className="w-full md:w-auto">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016]"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div> */}
-              
               <div className="flex overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
                 <div className="flex space-x-2">
                   {productCategories.map((category) => (
@@ -217,7 +207,6 @@ const Products = () => {
           </div>
         </section>
 
-        {/* Products Display Section */}
         <section className="py-12 bg-[#f5f5f5]">
           <div className="container mx-auto px-4">
             {filteredCategories.length === 0 ? (
@@ -265,7 +254,6 @@ const Products = () => {
                                 View Details
                               </button>
                               </Link>
-                              
                             </div>
                           </div>
                         </motion.div>
@@ -276,42 +264,7 @@ const Products = () => {
             )}
           </div>
         </section>
-
-        {/* Call to Action */}
-        {/* <section className="py-16 bg-[#104016] text-white">
-          <div className="container mx-auto px-4 text-center">
-            <motion.h2 
-              className="text-3xl md:text-4xl font-bold mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              Need Custom Configuration?
-            </motion.h2>
-            <motion.p 
-              className="text-xl max-w-2xl mx-auto mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              Contact our sales team for bulk orders and customized IT solutions.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              viewport={{ once: true }}
-            >
-              <button className="bg-[#ffd2a8] text-[#104016] px-8 py-3 rounded-md font-semibold hover:bg-white transition-colors">
-                Get a Quote
-              </button>
-            </motion.div>
-          </div>
-        </section> */}
       </main>
-
     </div>
   );
 };

@@ -7,10 +7,10 @@ const Contact = () => {
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="bg-[#ffd2a8] py-16">
+        <section className="bg-gradient-to-b from-[#104016] to-white py-16">
           <div className="container mx-auto px-4 text-center">
             <motion.h1 
-              className="text-4xl md:text-5xl font-bold text-[#104016] mb-4"
+              className="text-4xl md:text-5xl font-bold text-[#222222] mb-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}

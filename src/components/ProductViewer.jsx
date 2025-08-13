@@ -113,9 +113,9 @@ function ProductViewer() {
                   scale: index === 1 ? 1 : 0.9,
                 }}
                 transition={{ duration: 0.7, ease: "easeInOut" }}
-                onClick={() => nav('/products')}
+                onClick={() => nav('/products-details')}
               >
-                View Product
+                View Details
               </motion.button>
             </motion.div>
           ))}

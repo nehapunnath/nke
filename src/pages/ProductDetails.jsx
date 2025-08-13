@@ -13,7 +13,7 @@ const ProductDetails = () => {
     message: ''
   });
 
-  // Sample product data - replace with your actual data
+  // Sample product data
   const product = {
     id: '1',
     name: 'Dell Precision 7680 Mobile Workstation',
@@ -62,7 +62,6 @@ const ProductDetails = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the enquiry to your backend
     console.log('Enquiry submitted:', enquiryForm);
     alert('Thank you for your enquiry! Our sales team will contact you shortly.');
     setShowEnquiryModal(false);
@@ -70,35 +69,32 @@ const ProductDetails = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      
       <main className="flex-grow">
         {/* Product Details Section */}
-        <section className="py-8">
+        <section className="py-12">
           <div className="container mx-auto px-4">
-          
-
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="flex flex-col md:flex-row gap-8">
                 {/* Product Images */}
-                <div className="md:w-1/2">
-                  <div className="mb-4 border rounded-lg p-4 flex justify-center">
+                <div className="md:w-1/2 p-6">
+                  <div className="mb-6 border-2 border-[#e5e7eb] rounded-xl p-4 flex justify-center bg-white">
                     <img
                       src={selectedImage}
                       alt={product.name}
-                      className="h-64 object-contain"
+                      className="h-80 w-full object-contain"
                     />
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-3">
                     {product.images.map((img, idx) => (
                       <button
                         key={idx}
                         onClick={() => setSelectedImage(img)}
-                        className={`border rounded p-1 ${selectedImage === img ? 'border-blue-500' : 'border-gray-300'}`}
+                        className={`border-2 rounded-lg p-1 transition-all ${selectedImage === img ? 'border-[#104016] ring-2 ring-[#ffd2a8]' : 'border-gray-200 hover:border-[#104016]'}`}
                       >
                         <img
                           src={img}
                           alt={`Thumbnail ${idx + 1}`}
-                          className="h-16 w-16 object-contain"
+                          className="h-20 w-20 object-cover rounded-md"
                         />
                       </button>
                     ))}
@@ -106,36 +102,50 @@ const ProductDetails = () => {
                 </div>
 
                 {/* Product Info */}
-                <div className="md:w-1/2">
-                  <h1 className="text-2xl font-bold text-gray-900 mb-2">{product.name}</h1>
+                <div className="md:w-1/2 p-6">
+                  <div className="mb-4">
+                    <span className="text-sm font-medium text-[#104016] bg-[#e8f5e9] px-3 py-1 rounded-full">
+                      {product.category}
+                    </span>
+                  </div>
+                  
+                  <h1 className="text-3xl font-bold text-[#104016] mb-2">{product.name}</h1>
                   <div className="text-gray-600 mb-4">{product.brand}</div>
                   
-                  <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
-                    <div className="text-xl font-bold text-blue-700">{product.price}</div>
-                    <div className="text-green-600 font-medium">{product.stockStatus}</div>
+                  <div className="bg-[#f5f5f5] border-l-4 border-[#104016] p-4 mb-6 rounded-r-lg">
+                    <div className="text-2xl font-bold text-[#104016]">{product.price}</div>
+                    <div className="text-[#2c7744] font-medium">{product.stockStatus}</div>
                   </div>
 
                   <div className="mb-6">
-                    <h2 className="text-lg font-semibold mb-2">Product Details</h2>
-                    <ul className="space-y-1">
-                      <li><strong>Model No:</strong> {product.modelNo}</li>
-                      <li><strong>Warranty:</strong> {product.warranty}</li>
-                      <li><strong>Category:</strong> {product.category}</li>
+                    <h2 className="text-xl font-semibold text-[#104016] mb-3 border-b pb-2">Product Details</h2>
+                    <ul className="space-y-2">
+                      <li className="flex">
+                        <span className="font-medium text-gray-700 w-32">Model No:</span>
+                        <span>{product.modelNo}</span>
+                      </li>
+                      <li className="flex">
+                        <span className="font-medium text-gray-700 w-32">Warranty:</span>
+                        <span>{product.warranty}</span>
+                      </li>
                     </ul>
                   </div>
 
-                  <div className="mb-6">
-                    <h2 className="text-lg font-semibold mb-2">Specifications</h2>
-                    <ul className="list-disc pl-5 space-y-1">
+                  <div className="mb-8">
+                    <h2 className="text-xl font-semibold text-[#104016] mb-3 border-b pb-2">Specifications</h2>
+                    <ul className="space-y-2">
                       {product.specs.map((spec, index) => (
-                        <li key={index}>{spec}</li>
+                        <li key={index} className="flex items-start">
+                          <span className="text-[#ffd2a8] mr-2">•</span>
+                          <span>{spec}</span>
+                        </li>
                       ))}
                     </ul>
                   </div>
 
                   <button 
                     onClick={toggleEnquiryModal}
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium"
+                    className="w-full bg-[#104016] hover:bg-[#2c7744] text-white py-3 rounded-lg transition-all duration-300 font-medium shadow-md hover:shadow-lg"
                   >
                     Enquire Now
                   </button>
@@ -143,9 +153,9 @@ const ProductDetails = () => {
               </div>
 
               {/* Description Section */}
-              <div className="mt-8 pt-6 border-t">
-                <h2 className="text-xl font-semibold mb-4">Description</h2>
-                <p className="text-gray-700">{product.description}</p>
+              <div className="p-6 border-t border-gray-200">
+                <h2 className="text-xl font-semibold text-[#104016] mb-4">Description</h2>
+                <p className="text-gray-700 leading-relaxed">{product.description}</p>
               </div>
             </div>
           </div>
@@ -154,12 +164,12 @@ const ProductDetails = () => {
         {/* Enquiry Modal */}
         {showEnquiryModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
+            <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-gray-900">Enquire About This Product</h2>
+                <h2 className="text-xl font-bold text-[#104016]">Enquire About This Product</h2>
                 <button 
                   onClick={toggleEnquiryModal}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-gray-500 hover:text-[#104016] transition-colors"
                 >
                   ✕
                 </button>
@@ -167,68 +177,68 @@ const ProductDetails = () => {
               
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name*</label>
+                  <label className="block text-sm font-medium text-[#104016] mb-1">Full Name*</label>
                   <input
                     type="text"
                     name="name"
                     required
                     value={enquiryForm.name}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#104016] focus:border-[#104016]"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email Address*</label>
+                  <label className="block text-sm font-medium text-[#104016] mb-1">Email Address*</label>
                   <input
                     type="email"
                     name="email"
                     required
                     value={enquiryForm.email}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#104016] focus:border-[#104016]"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number*</label>
+                  <label className="block text-sm font-medium text-[#104016] mb-1">Phone Number*</label>
                   <input
                     type="tel"
                     name="phone"
                     required
                     value={enquiryForm.phone}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#104016] focus:border-[#104016]"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                  <label className="block text-sm font-medium text-[#104016] mb-1">Company Name</label>
                   <input
                     type="text"
                     name="company"
                     value={enquiryForm.company}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#104016] focus:border-[#104016]"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Your Enquiry*</label>
+                  <label className="block text-sm font-medium text-[#104016] mb-1">Your Enquiry*</label>
                   <textarea
                     name="message"
                     rows="4"
                     required
                     value={enquiryForm.message}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#104016] focus:border-[#104016]"
                     placeholder={`I'm interested in the ${product.name}. Please provide more information about...`}
                   ></textarea>
                 </div>
                 
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition font-medium"
+                  className="w-full bg-[#104016] hover:bg-[#2c7744] text-white py-3 rounded-md transition-all duration-300 font-medium shadow-md hover:shadow-lg"
                 >
                   Submit Enquiry
                 </button>
@@ -237,7 +247,6 @@ const ProductDetails = () => {
           </div>
         )}
       </main>
-
     </div>
   );
 };

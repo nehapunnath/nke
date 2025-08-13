@@ -2,7 +2,8 @@ import React from 'react';
 import ProductViewer from '../components/ProductViewer';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowRight } from 'react-icons/fi';
+import { FiArrowRight, FiArrowLeft, FiArrowDown } from 'react-icons/fi';
+import HomeGallery from '../components/HomeGallery';
 
 // Animation variants
 const containerVariants = {
@@ -44,14 +45,22 @@ const statItemVariants = {
 const Home = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Hero Section */}
+      <HomeGallery/>
+      
+      {/* Enhanced Hero Section */}
       <motion.section 
-        className="bg-gradient-to-r from-[#104016] to-[#2c7744] py-28 text-white"
+        className="relative bg-gradient-to-r from-[#104016] to-[#2c7744] py-28 text-white overflow-hidden"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
-        <div className="container mx-auto px-4 text-center">
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-full opacity-10">
+          <div className="absolute top-20 left-20 w-40 h-40 rounded-full bg-[#ffd2a8] mix-blend-overlay blur-xl"></div>
+          <div className="absolute bottom-10 right-20 w-60 h-60 rounded-full bg-[#a8ffd2] mix-blend-overlay blur-xl"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 text-center relative z-10">
           <motion.h1 
             className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
             variants={itemVariants}
@@ -60,6 +69,7 @@ const Home = () => {
               Nke Infinity Tech Solutions
             </span>
           </motion.h1>
+          
           <motion.p 
             className="text-xl md:text-2xl max-w-3xl mx-auto mb-8"
             variants={itemVariants}
@@ -99,7 +109,7 @@ const Home = () => {
         </div>
       </motion.section>
 
-      {/* Product Gallery */}
+      {/* Product Gallery with Left Arrow */}
       <motion.section 
         className="py-16 bg-gray-50"
         initial="hidden"
@@ -107,13 +117,18 @@ const Home = () => {
         viewport={{ once: true }}
         variants={containerVariants}
       >
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 relative">
           <motion.div className="text-center mb-12" variants={itemVariants}>
             <h2 className="text-3xl md:text-4xl font-bold text-[#104016] mb-4">Featured Products</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Discover our curated selection of premium IT equipment and solutions
             </p>
           </motion.div>
+          
+          {/* Left Arrow */}
+          <button className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-[#104016] text-white p-3 rounded-full shadow-lg hover:bg-[#2c7744] transition-colors duration-300 hidden md:block">
+            <FiArrowLeft className="w-6 h-6" />
+          </button>
           
           <ProductViewer/>
           
