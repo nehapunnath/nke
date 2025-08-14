@@ -23,7 +23,7 @@ const Header = () => {
         </div>
 
         <div className="flex items-center justify-center flex-grow mx-8 max-w-2xl">
-          <form onSubmit={handleSearch} className="w-80 relative">
+          <form onSubmit={handleSearch} className="w-full relative">
             <input
               type="text"
               placeholder="Search products..."
