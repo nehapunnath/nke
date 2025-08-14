@@ -18,7 +18,7 @@ const Clients = () => {
       clients: [
         { logo: 'https://www.citoinfotech.com/image/clients/goverment/army1.png' },
         { logo: 'https://www.citoinfotech.com/image/clients/goverment/airforce1.png' },
-        {  logo: 'https://www.citoinfotech.com/image/clients/goverment/post1.png' }
+        {  logo: 'https://static.theprint.in/wp-content/uploads/2024/05/Untitled-design-2024-05-24T212824.336-1024x576.jpg' }
       ]
     },
 

@@ -200,7 +200,39 @@ const Products = () => {
           specs: '3MP, Weatherproof, Night Vision, 4mm lens',
         }
       ]
-    }
+    },
+    // Add this to your productCategories array (around line 12)
+{
+  id: 8,
+  name: 'UPS Systems',
+  catalogue: '',
+  items: [
+    { 
+      id: 801, 
+      name: 'APC Back-UPS BX1100C-IN', 
+      image: 'https://www.namratapower.com/img/APC-Back-UPS-1100VA-back.png', 
+      price: '₹12,500', 
+      specs: '1100VA/660W, 6 Outlets, AVR, USB Charging',
+    },
+    { 
+      id: 802, 
+      name: 'Microtek Legend 1600', 
+      image: 'https://tiimg.tistatic.com/fp/1/008/410/rectangular-plain-over-current-protection-single-phase-plastic-body-ups--158.jpg', 
+      price: '₹15,000', 
+      specs: '1600VA/960W, Pure Sine Wave, LCD Display',
+    },
+    { 
+      id: 803, 
+      name: 'Zebronics UPS 1000VA', 
+      image: 'https://5.imimg.com/data5/SELLER/Default/2025/2/491265674/TI/GI/KB/38599557/zebronics-1000va-line-interactive-ups.png', 
+      price: '₹8,500', 
+      specs: '1000VA/600W, 2 Battery Backup Ports',
+    },
+   
+    
+   
+  ]
+}
   ];
 
   const [activeCategory, setActiveCategory] = useState(1);

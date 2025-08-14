@@ -45,10 +45,10 @@ const statItemVariants = {
 const Home = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <HomeGallery/>
-      
+      <HomeGallery />
+
       {/* Enhanced Hero Section */}
-      <motion.section 
+      <motion.section
         className="relative bg-gradient-to-r from-[#104016] to-[#2c7744] py-28 text-white overflow-hidden"
         initial="hidden"
         animate="visible"
@@ -59,9 +59,9 @@ const Home = () => {
           <div className="absolute top-20 left-20 w-40 h-40 rounded-full bg-[#ffd2a8] mix-blend-overlay blur-xl"></div>
           <div className="absolute bottom-10 right-20 w-60 h-60 rounded-full bg-[#a8ffd2] mix-blend-overlay blur-xl"></div>
         </div>
-        
+
         <div className="container mx-auto px-4 text-center relative z-10">
-          <motion.h1 
+          <motion.h1
             className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
             variants={itemVariants}
           >
@@ -69,8 +69,8 @@ const Home = () => {
               NKE Infinity Tech Solutions
             </span>
           </motion.h1>
-          
-          <motion.p 
+
+          <motion.p
             className="text-xl md:text-2xl max-w-3xl mx-auto mb-8"
             variants={itemVariants}
           >
@@ -80,7 +80,7 @@ const Home = () => {
       </motion.section>
 
       {/* Stats Section */}
-      <motion.section 
+      <motion.section
         className="py-16 bg-white"
         initial="hidden"
         whileInView="visible"
@@ -95,7 +95,7 @@ const Home = () => {
               { value: "1000+", label: "Satisfied Clients" },
               { value: "24/7", label: "Support Available" }
             ].map((stat, index) => (
-              <motion.div 
+              <motion.div
                 key={index}
                 className="p-6 bg-[#f8f8f8] rounded-lg shadow-sm hover:shadow-md transition-shadow"
                 variants={statItemVariants}
@@ -110,7 +110,7 @@ const Home = () => {
       </motion.section>
 
       {/* Product Gallery with Left Arrow */}
-      <motion.section 
+      <motion.section
         className="py-16 bg-gray-50"
         initial="hidden"
         whileInView="visible"
@@ -124,17 +124,17 @@ const Home = () => {
               Discover our curated selection of premium IT equipment and solutions
             </p>
           </motion.div>
-          
+
           {/* Left Arrow */}
           <button className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-[#104016] text-white p-3 rounded-full shadow-lg hover:bg-[#2c7744] transition-colors duration-300 hidden md:block">
             <FiArrowLeft className="w-6 h-6" />
           </button>
-          
-          <ProductViewer/>
-          
+
+          <ProductViewer />
+
           <motion.div className="text-center mt-10" variants={itemVariants}>
-            <Link 
-              to="/products" 
+            <Link
+              to="/products"
               className="inline-flex items-center text-[#104016] hover:text-[#2c7744] font-medium text-lg group transition-colors duration-300"
             >
               View All Products
@@ -145,7 +145,8 @@ const Home = () => {
       </motion.section>
 
       {/* Our Partners Section */}
-      <motion.section 
+      {/* Our Partners Section */}
+      <motion.section
         className="py-16 bg-white"
         initial="hidden"
         whileInView="visible"
@@ -159,91 +160,87 @@ const Home = () => {
               We collaborate with industry leaders to bring you the best technology solutions
             </p>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-center"
             variants={containerVariants}
           >
-            {/* HP Logo */}
-            <motion.div 
-              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+            <motion.div
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300 h-24"
               variants={itemVariants}
               whileHover={{ scale: 1.1 }}
             >
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg" 
-                alt="HP" 
-                className="h-12 object-contain  transition-all duration-500"
+              <img
+                src="https://anixtertechnology.com/wp-content/uploads/2024/04/DIGISOL-full-Logo-Horizontal-Original.png"
+                alt="HP"
+                className="h-full w-full object-contain transition-all duration-500"
                 title="HP"
               />
             </motion.div>
 
-            {/* Dell Logo */}
-            <motion.div 
-              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+            <motion.div
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300 h-24"
               variants={itemVariants}
               whileHover={{ scale: 1.1 }}
             >
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/1/18/Dell_logo_2016.svg" 
-                alt="Dell" 
-                className="h-12 object-contain  transition-all duration-500"
+              <img
+                src="https://www.nicepng.com/png/full/215-2151581_brand-redington-india-ltd.png"
+                alt="Dell"
+                className="h-full w-full object-contain transition-all duration-500"
                 title="Dell"
               />
             </motion.div>
 
-            {/* Lenovo Logo */}
-            <motion.div 
-              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+            <motion.div
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300 h-24"
               variants={itemVariants}
               whileHover={{ scale: 1.1 }}
             >
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/0/03/Lenovo_Global_Corporate_Logo.png" 
-                alt="Lenovo" 
-                className="h-12 object-contain  transition-all duration-500"
+              <img
+                src="https://www.channelpronetwork.com/wp-content/uploads/2023/11/cyber-power-logo-all-red1200.jpg"
+                alt="Lenovo"
+                className="h-full w-full object-contain transition-all duration-500"
                 title="Lenovo"
               />
             </motion.div>
 
-            {/* Canon Logo */}
-            <motion.div 
-              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+            <motion.div
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300 h-24"
               variants={itemVariants}
               whileHover={{ scale: 1.1 }}
             >
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Canon_Logo.png" 
-                alt="Canon" 
-                className="h-12 object-contain  transition-all duration-500"
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Canon_Logo.png"
+                alt="Canon"
+                className="h-full w-full object-contain transition-all duration-500"
                 title="Canon"
               />
             </motion.div>
 
             {/* Epson Logo */}
-            <motion.div 
-              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+            <motion.div
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300 h-24"
               variants={itemVariants}
               whileHover={{ scale: 1.1 }}
             >
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/2560px-Epson_logo.svg.png" 
-                alt="Epson" 
-                className="h-12 object-contain  transition-all duration-500"
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/2560px-Epson_logo.svg.png"
+                alt="Epson"
+                className="h-full w-full object-contain transition-all duration-500"
                 title="Epson"
               />
             </motion.div>
 
             {/* Microsoft Logo */}
-            <motion.div 
-              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+            <motion.div
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300 h-24"
               variants={itemVariants}
               whileHover={{ scale: 1.1 }}
             >
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" 
-                alt="Microsoft" 
-                className="h-12 object-contain  transition-all duration-500"
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg"
+                alt="Microsoft"
+                className="h-full w-full object-contain transition-all duration-500"
                 title="Microsoft"
               />
             </motion.div>
@@ -252,7 +249,7 @@ const Home = () => {
       </motion.section>
 
       {/* Testimonials */}
-      <motion.section 
+      <motion.section
         className="py-16 bg-gradient-to-br from-[#f0f7f4] to-[#c4e3d5]"
         initial="hidden"
         whileInView="visible"
@@ -260,7 +257,7 @@ const Home = () => {
         variants={containerVariants}
       >
         <div className="container mx-auto px-4">
-          <motion.h2 
+          <motion.h2
             className="text-3xl font-bold text-center text-[#104016] mb-12"
             variants={itemVariants}
           >
@@ -284,7 +281,7 @@ const Home = () => {
                 name: "Arjun Mehta"
               }
             ].map((testimonial, index) => (
-              <motion.div 
+              <motion.div
                 key={index}
                 className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
                 variants={itemVariants}
