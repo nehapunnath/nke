@@ -39,12 +39,7 @@ const Footer = () => {
           <div className="mb-8 md:mb-0">
             <h4 className="text-lg font-semibold mb-4 border-b border-[#ffd2a8] pb-2">Contact Us</h4>
             <ul className="space-y-3">
-              <li className="flex items-center">
-                <FaPhone className="mr-3 text-[#ffd2a8]" />
-                <a href="tel:+919958764971" className="hover:text-[#ffd2a8] transition-colors">
-                  +91 9958764971
-                </a>
-              </li>
+              
               <li className="flex items-center">
                 <FaEnvelope className="mr-3 text-[#ffd2a8]" />
                 <a href="mailto:nke.infinity@gmail.com" className="hover:text-[#ffd2a8] transition-colors">
