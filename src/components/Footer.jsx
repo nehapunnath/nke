@@ -10,14 +10,8 @@ const Footer = () => {
           {/* Logo and Company Info */}
           <div className="mb-8 md:mb-0 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start mb-4">
-              {/* <div className=" p-2 rounded-lg mr-3">
-                <img 
-                  src={logo}
-                  alt="Nke Infinity Logo" 
-                  className="h-10 w-10"
-                />
-              </div> */}
-              <h3 className="text-xl font-bold">Nke Infinity Tech Solutions LLP</h3>
+             
+              <h3 className="text-xl font-bold">NKE Infinity Tech Solutions LLP</h3>
             </div>
             <p className="max-w-xs mb-4">
               Your trusted partner for premium IT solutions in Bengaluru

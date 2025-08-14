@@ -7,22 +7,19 @@ const Header = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Handle search functionality here
     console.log('Searching for:', searchQuery);
-    // You would typically redirect to search results or filter products
   };
 
   return (
     <header className="bg-[#f8f9fa] text-[#104016] shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center space-x-3">
-          {/* Logo with controlled size */}
           <img 
             src={logo} 
             alt="Nke Infinity Tech Logo" 
             className="h-12 w-auto" 
           />
-          <h1 className="text-xl font-bold">Nke Infinity Tech</h1>
+          <h1 className="text-xl font-bold">NKE Infinity Tech</h1>
         </div>
 
         {/* Search Bar */}
@@ -70,7 +67,6 @@ const Header = () => {
         </nav>
       </div>
 
-      {/* Mobile Search Bar - appears below on small screens */}
       <div className="md:hidden container mx-auto px-4 py-2">
         <form onSubmit={handleSearch} className="relative">
           <input

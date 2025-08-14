@@ -1,10 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 const Contact = () => {
+  const [isExistingCustomer, setIsExistingCustomer] = useState(false);
+  const [formData, setFormData] = useState({
+    userId: '',
+    password: '',
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    console.log('Form submitted:', formData);
+    alert(isExistingCustomer 
+      ? 'Existing customer query submitted!' 
+      : 'New customer query submitted!');
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
-      
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="bg-gradient-to-b from-[#104016] to-white py-16">
@@ -15,7 +41,7 @@ const Contact = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              Contact Nke Infinity Tech
+              Contact NKE Infinity Tech
             </motion.h1>
             <motion.p 
               className="text-xl text-[#425333] max-w-2xl mx-auto"
@@ -25,6 +51,26 @@ const Contact = () => {
             >
               We're here to help with all your IT hardware needs
             </motion.p>
+          </div>
+        </section>
+
+        {/* Customer Type Selection */}
+        <section className="py-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setIsExistingCustomer(false)}
+                className={`px-6 py-3 rounded-lg text-lg font-medium ${!isExistingCustomer ? 'bg-[#104016] text-white' : 'bg-gray-100 text-[#425333]'}`}
+              >
+                New Customer
+              </button>
+              <button
+                onClick={() => setIsExistingCustomer(true)}
+                className={`px-6 py-3 rounded-lg text-lg font-medium ${isExistingCustomer ? 'bg-[#104016] text-white' : 'bg-gray-100 text-[#425333]'}`}
+              >
+                Existing Customer
+              </button>
+            </div>
           </div>
         </section>
 
@@ -79,7 +125,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold text-[#425333] mb-1">Email Addresses</h3>
-                      <p className="text-gray-700 mb-1">snke.infinity@gmail.com</p>
+                      <p className="text-gray-700 mb-1">nke.infinity@gmail.com</p>
                     </div>
                   </div>
                   
@@ -106,59 +152,105 @@ const Contact = () => {
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
               >
-                <h2 className="text-3xl font-bold text-[#104016] mb-6">Send Us a Message</h2>
-                <form className="space-y-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-[#425333] mb-1">Your Name</label>
-                    <input 
-                      type="text" 
-                      id="name" 
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016]"
-                      placeholder="Enter your name"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-[#425333] mb-1">Email Address</label>
-                    <input 
-                      type="email" 
-                      id="email" 
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016]"
-                      placeholder="Enter your email"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-[#425333] mb-1">Phone Number</label>
-                    <input 
-                      type="tel" 
-                      id="phone" 
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016]"
-                      placeholder="Enter your phone number"
-                    />
-                  </div>
-                  
-                  {/* <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-[#425333] mb-1">Subject</label>
-                    <select 
-                      id="subject" 
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016]"
-                    >
-                      <option value="">Select a subject</option>
-                      <option value="sales">Sales Inquiry</option>
-                      <option value="support">Technical Support</option>
-                      <option value="service">Service Request</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div> */}
+                <h2 className="text-3xl font-bold text-[#104016] mb-6">
+                  {isExistingCustomer ? 'Existing Customer Login' : 'Send Us a Message'}
+                </h2>
+                
+                <form className="space-y-4" onSubmit={handleSubmit}>
+                  {isExistingCustomer ? (
+                    <>
+                      <div>
+                        <label htmlFor="userId" className="block text-sm font-medium text-[#425333] mb-1">
+                          GST Number (User ID)
+                        </label>
+                        <input 
+                          type="text" 
+                          id="userId" 
+                          name="userId"
+                          value={formData.userId}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016]"
+                          placeholder="Enter your GST number"
+                          required
+                        />
+                      </div>
+                      
+                      <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-[#425333] mb-1">
+                          Password
+                        </label>
+                        <input 
+                          type="password" 
+                          id="password" 
+                          name="password"
+                          value={formData.password}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016]"
+                          placeholder="Enter your password"
+                          required
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Password is generated by NKE Infinity Tech. Contact us if you don't have one.
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-[#425333] mb-1">Your Name</label>
+                        <input 
+                          type="text" 
+                          id="name" 
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016]"
+                          placeholder="Enter your name"
+                          required
+                        />
+                      </div>
+                      
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-[#425333] mb-1">Email Address</label>
+                        <input 
+                          type="email" 
+                          id="email" 
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016]"
+                          placeholder="Enter your email"
+                          required
+                        />
+                      </div>
+                      
+                      <div>
+                        <label htmlFor="phone" className="block text-sm font-medium text-[#425333] mb-1">Phone Number</label>
+                        <input 
+                          type="tel" 
+                          id="phone" 
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016]"
+                          placeholder="Enter your phone number"
+                          required
+                        />
+                      </div>
+                    </>
+                  )}
                   
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-[#425333] mb-1">Message</label>
                     <textarea 
                       id="message" 
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
                       rows="4" 
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016]"
                       placeholder="Enter your message"
+                      required
                     ></textarea>
                   </div>
                   
@@ -166,7 +258,7 @@ const Contact = () => {
                     type="submit" 
                     className="w-full bg-[#104016] text-white py-3 px-6 rounded-md hover:bg-[#425333] transition-colors font-semibold"
                   >
-                    Send Message
+                    {isExistingCustomer ? 'Submit as Existing Customer' : 'Send Message'}
                   </button>
                 </form>
               </motion.div>
@@ -209,7 +301,6 @@ const Contact = () => {
           </div>
         </section>
       </main>
-
     </div>
   );
 };

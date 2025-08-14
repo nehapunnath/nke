@@ -19,7 +19,7 @@ const AboutUs = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              About Nke Infinity Tech Solutions
+              About NKE Infinity Tech Solutions
             </motion.h1>
             <motion.p 
               className="text-xl text-[#425333] max-w-2xl mx-auto"
@@ -45,7 +45,7 @@ const AboutUs = () => {
               >
                 <h2 className="text-3xl font-bold text-[#104016] mb-6">Our Story</h2>
                 <p className="text-gray-700 mb-4">
-                  Founded in 2024, Nke Infinity Tech Solutions LLP has grown from a small computer hardware retailer to a leading provider of comprehensive IT solutions in Bengaluru.
+                  Founded in 2024, NKE Infinity Tech Solutions LLP has grown from a small computer hardware retailer to a leading provider of comprehensive IT solutions in Bengaluru.
                 </p>
                 <p className="text-gray-700 mb-4">
                   What started as a passion for technology among our founders has transformed into a business serving hundreds of satisfied customers across Karnataka.
@@ -146,7 +146,7 @@ const AboutUs = () => {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              Why Choose Nke Infinity Tech?
+              Why Choose NKE Infinity Tech?
             </motion.h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

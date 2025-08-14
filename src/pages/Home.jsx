@@ -66,7 +66,7 @@ const Home = () => {
             variants={itemVariants}
           >
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ffd2a8] to-white">
-              Nke Infinity Tech Solutions
+              NKE Infinity Tech Solutions
             </span>
           </motion.h1>
           
@@ -163,12 +163,12 @@ const Home = () => {
             {[
               {
                 rating: "★★★★★",
-                quote: "Nke Infinity provided our school with high-quality interactive panels that have transformed our classrooms. Their after-sales support is exceptional.",
+                quote: "NKE Infinity provided our school with high-quality interactive panels that have transformed our classrooms. Their after-sales support is exceptional.",
                 name: "Rahul Sharma"
               },
               {
                 rating: "★★★★★",
-                quote: "We've been sourcing our office computers from Nke Infinity for 3 years now. Reliable products and on-time delivery every time.",
+                quote: "We've been sourcing our office computers from NKE Infinity for 3 years now. Reliable products and on-time delivery every time.",
                 name: "Priya Patel"
               },
               {
