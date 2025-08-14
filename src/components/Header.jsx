@@ -17,7 +17,7 @@ const Header = () => {
           <img
             src={logo}
             alt="Nke Infinity Tech Logo"
-            className="h-20 w-auto"  
+            className="h-20 w-auto"
           />
           <h1 className="text-xl font-bold">NKE Infinity Tech Solutions</h1>
         </div>
@@ -55,6 +55,11 @@ const Header = () => {
             <li>
               <a href="/products" className="hover:text-[#ffd2a8] transition-colors duration-300 font-medium whitespace-nowrap">
                 Products
+              </a>
+            </li>
+            <li>
+              <a href="/clients" className="hover:text-[#ffd2a8] transition-colors duration-300 font-medium whitespace-nowrap">
+                Clients
               </a>
             </li>
             <li>

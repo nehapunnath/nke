@@ -2,7 +2,7 @@ import React from 'react';
 import ProductViewer from '../components/ProductViewer';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiArrowLeft, FiArrowDown } from 'react-icons/fi';
+import { FiArrowRight, FiArrowLeft } from 'react-icons/fi';
 import HomeGallery from '../components/HomeGallery';
 
 // Animation variants
@@ -140,6 +140,113 @@ const Home = () => {
               View All Products
               <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
             </Link>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      {/* Our Partners Section */}
+      <motion.section 
+        className="py-16 bg-white"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={containerVariants}
+      >
+        <div className="container mx-auto px-4">
+          <motion.div className="text-center mb-12" variants={itemVariants}>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#104016] mb-4">Our Trusted Partners</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              We collaborate with industry leaders to bring you the best technology solutions
+            </p>
+          </motion.div>
+          
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-center"
+            variants={containerVariants}
+          >
+            {/* HP Logo */}
+            <motion.div 
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+              variants={itemVariants}
+              whileHover={{ scale: 1.1 }}
+            >
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg" 
+                alt="HP" 
+                className="h-12 object-contain  transition-all duration-500"
+                title="HP"
+              />
+            </motion.div>
+
+            {/* Dell Logo */}
+            <motion.div 
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+              variants={itemVariants}
+              whileHover={{ scale: 1.1 }}
+            >
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/1/18/Dell_logo_2016.svg" 
+                alt="Dell" 
+                className="h-12 object-contain  transition-all duration-500"
+                title="Dell"
+              />
+            </motion.div>
+
+            {/* Lenovo Logo */}
+            <motion.div 
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+              variants={itemVariants}
+              whileHover={{ scale: 1.1 }}
+            >
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/0/03/Lenovo_Global_Corporate_Logo.png" 
+                alt="Lenovo" 
+                className="h-12 object-contain  transition-all duration-500"
+                title="Lenovo"
+              />
+            </motion.div>
+
+            {/* Canon Logo */}
+            <motion.div 
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+              variants={itemVariants}
+              whileHover={{ scale: 1.1 }}
+            >
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Canon_Logo.png" 
+                alt="Canon" 
+                className="h-12 object-contain  transition-all duration-500"
+                title="Canon"
+              />
+            </motion.div>
+
+            {/* Epson Logo */}
+            <motion.div 
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+              variants={itemVariants}
+              whileHover={{ scale: 1.1 }}
+            >
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Epson_logo.svg/2560px-Epson_logo.svg.png" 
+                alt="Epson" 
+                className="h-12 object-contain  transition-all duration-500"
+                title="Epson"
+              />
+            </motion.div>
+
+            {/* Microsoft Logo */}
+            <motion.div 
+              className="flex items-center justify-center p-4 hover:scale-105 transition-transform duration-300"
+              variants={itemVariants}
+              whileHover={{ scale: 1.1 }}
+            >
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" 
+                alt="Microsoft" 
+                className="h-12 object-contain  transition-all duration-500"
+                title="Microsoft"
+              />
+            </motion.div>
           </motion.div>
         </div>
       </motion.section>
