@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import EnquiryForm from '../components/EnquiryForm';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -108,10 +109,10 @@ const ProductDetails = () => {
                       {product.category}
                     </span>
                   </div>
-                  
+
                   <h1 className="text-3xl font-bold text-[#104016] mb-2">{product.name}</h1>
                   <div className="text-gray-600 mb-4">{product.brand}</div>
-                  
+
                   <div className="bg-[#f5f5f5] border-l-4 border-[#104016] p-4 mb-6 rounded-r-lg">
                     <div className="text-2xl font-bold text-[#104016]">{product.price}</div>
                     <div className="text-[#2c7744] font-medium">{product.stockStatus}</div>
@@ -143,13 +144,14 @@ const ProductDetails = () => {
                     </ul>
                   </div>
 
-                  <button 
+                  <button
                     onClick={toggleEnquiryModal}
                     className="w-full bg-[#104016] hover:bg-[#2c7744] text-white py-3 rounded-lg transition-all duration-300 font-medium shadow-md hover:shadow-lg"
                   >
                     Enquire Now
                   </button>
                 </div>
+
               </div>
 
               {/* Description Section */}
@@ -164,88 +166,13 @@ const ProductDetails = () => {
         {/* Enquiry Modal */}
         {showEnquiryModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-[#104016]">Enquire About This Product</h2>
-                <button 
-                  onClick={toggleEnquiryModal}
-                  className="text-gray-500 hover:text-[#104016] transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-[#104016] mb-1">Full Name*</label>
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    value={enquiryForm.name}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#104016] focus:border-[#104016]"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-[#104016] mb-1">Email Address*</label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    value={enquiryForm.email}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#104016] focus:border-[#104016]"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-[#104016] mb-1">Phone Number*</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    value={enquiryForm.phone}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#104016] focus:border-[#104016]"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-[#104016] mb-1">Company Name</label>
-                  <input
-                    type="text"
-                    name="company"
-                    value={enquiryForm.company}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#104016] focus:border-[#104016]"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-[#104016] mb-1">Your Enquiry*</label>
-                  <textarea
-                    name="message"
-                    rows="4"
-                    required
-                    value={enquiryForm.message}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#104016] focus:border-[#104016]"
-                    placeholder={`I'm interested in the ${product.name}. Please provide more information about...`}
-                  ></textarea>
-                </div>
-                
-                <button
-                  type="submit"
-                  className="w-full bg-[#104016] hover:bg-[#2c7744] text-white py-3 rounded-md transition-all duration-300 font-medium shadow-md hover:shadow-lg"
-                >
-                  Submit Enquiry
-                </button>
-              </form>
-            </div>
+            <EnquiryForm 
+              productName={product.name} 
+              onClose={() => setShowEnquiryModal(false)} 
+            />
           </div>
         )}
+
       </main>
     </div>
   );

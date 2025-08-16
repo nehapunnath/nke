@@ -1,5 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import client1 from '../assets/client1.jpg'
+import client2 from '../assets/client2.jpg'
+import client3 from '../assets/client3.jpg'
 
 const Clients = () => {
   const clientCategories = [
@@ -7,18 +10,23 @@ const Clients = () => {
       id: 1,
       name: 'Enterprise',
       clients: [
-        {  logo: 'https://www.citoinfotech.com/image/clients/enterprise/iti.png' },
+        {  logo: 'https://images.seeklogo.com/logo-png/6/2/hindustan-aeronautics-limited-logo-png_seeklogo-66974.png' },
         { logo: 'https://www.citoinfotech.com/image/clients/enterprise/isro1.png' },
-        { logo: 'https://www.citoinfotech.com/image/clients/enterprise/beml1.png' }
+        { logo: 'https://www.citoinfotech.com/image/clients/enterprise/beml1.png' },
+        { logo: client1 },
+
+
       ]
     },
     {
       id: 2,
       name: 'Government',
       clients: [
-        { logo: 'https://www.citoinfotech.com/image/clients/goverment/army1.png' },
-        { logo: 'https://www.citoinfotech.com/image/clients/goverment/airforce1.png' },
-        {  logo: 'https://static.theprint.in/wp-content/uploads/2024/05/Untitled-design-2024-05-24T212824.336-1024x576.jpg' }
+        { logo: client2 },
+        { logo: 'https://download.logo.wine/logo/Indian_Air_Force/Indian_Air_Force-Logo.wine.png' },
+        {  logo: 'https://dyncdn.exampathfinder.net/epf_n_attachments/organisation/Yg1KZu8V/logo.png' },
+        {  logo: client3 },
+
       ]
     },
 
