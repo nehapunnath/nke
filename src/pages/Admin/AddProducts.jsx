@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { AdminSidebar } from '../../components/AdminSidebar';
+import { addProduct, uploadCategoryCatalogue } from '../../services/productApi';
 
 const AddProducts = () => {
   const [productData, setProductData] = useState({
@@ -13,10 +14,11 @@ const AddProducts = () => {
     description: '',
     images: [],
     specs: [''],
-    catalogue: null
+    categoryCatalogue: null
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const categories = [
     'Desktops',
@@ -66,10 +68,25 @@ const AddProducts = () => {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    setProductData(prev => ({
-      ...prev,
-      images: [...prev.images, ...files]
-    }));
+    const validFiles = files.filter(file => {
+      if (!file.type.startsWith('image/')) {
+        setError('Only image files are allowed');
+        return false;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image size should be less than 5MB');
+        return false;
+      }
+      return true;
+    });
+
+    if (validFiles.length > 0) {
+      setError('');
+      setProductData(prev => ({
+        ...prev,
+        images: [...prev.images, ...validFiles]
+      }));
+    }
   };
 
   const removeImage = (index) => {
@@ -82,67 +99,132 @@ const AddProducts = () => {
 
   const handleCatalogueUpload = (e) => {
     const file = e.target.files[0];
+    if (file) {
+      if (file.type !== 'application/pdf') {
+        setError('Please upload a PDF file for the category catalogue');
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        setError('Catalogue size should be less than 10MB');
+        return;
+      }
+      if (!productData.category) {
+        setError('Please select a category before uploading a catalogue');
+        return;
+      }
+      
+      setProductData(prev => ({
+        ...prev,
+        categoryCatalogue: file
+      }));
+      setError('');
+    }
+  };
+
+  const removeCatalogue = () => {
     setProductData(prev => ({
       ...prev,
-      catalogue: file
+      categoryCatalogue: null
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError('');
 
     try {
+      // Validate required fields
+      if (!productData.name || !productData.brand || !productData.category || 
+          !productData.price || !productData.modelNo || !productData.warranty || 
+          !productData.description) {
+        setError('Please fill in all required fields');
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Validate images
+      if (productData.images.length === 0) {
+        setError('Please upload at least one product image');
+        setIsSubmitting(false);
+        return;
+      }
+
       // Filter out empty specs
       const filteredSpecs = productData.specs.filter(spec => spec.trim() !== '');
 
-      // Create FormData for file uploads
-      const formData = new FormData();
-      formData.append('name', productData.name);
-      formData.append('brand', productData.brand);
-      formData.append('category', productData.category);
-      formData.append('price', productData.price);
-      formData.append('modelNo', productData.modelNo);
-      formData.append('warranty', productData.warranty);
-      formData.append('stockStatus', productData.stockStatus);
-      formData.append('description', productData.description);
-      formData.append('specs', JSON.stringify(filteredSpecs));
-      
-      // Append images
-      productData.images.forEach((image, index) => {
-        formData.append(`images`, image);
-      });
-      
-      // Append catalogue if exists
-      if (productData.catalogue) {
-        formData.append('catalogue', productData.catalogue);
-      }
+      // Prepare product data
+      const productPayload = {
+        name: productData.name,
+        brand: productData.brand,
+        category: productData.category,
+        price: productData.price,
+        modelNo: productData.modelNo,
+        warranty: productData.warranty,
+        stockStatus: productData.stockStatus,
+        description: productData.description,
+        images: productData.images,
+        specs: filteredSpecs
+      };
 
-      console.log('Product Data:', Object.fromEntries(formData));
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      alert('Product added successfully!');
-      
-      // Reset form
-      setProductData({
-        name: '',
-        brand: '',
-        category: '',
-        price: '',
-        modelNo: '',
-        warranty: '',
-        stockStatus: 'In Stock',
-        description: '',
-        images: [],
-        specs: [''],
-        catalogue: null
-      });
-      
+      // Add product
+      const productResult = await addProduct(productPayload);
+
+      if (productResult.success) {
+        // Handle category catalogue upload if provided
+        if (productData.categoryCatalogue) {
+          try {
+            const catalogueResult = await uploadCategoryCatalogue(
+              productData.category,
+              productData.categoryCatalogue
+            );
+            if (!catalogueResult.success) {
+              setError(catalogueResult.message || 'Failed to upload category catalogue');
+            }
+          } catch (catalogueError) {
+            setError(catalogueError.message || 'Failed to upload category catalogue');
+          }
+        }
+
+        alert('Product added successfully!');
+        setProductData({
+          name: '',
+          brand: '',
+          category: '',
+          price: '',
+          modelNo: '',
+          warranty: '',
+          stockStatus: 'In Stock',
+          description: '',
+          images: [],
+          specs: [''],
+          categoryCatalogue: null
+        });
+      } else {
+        setError(productResult.message || 'Failed to add product');
+      }
     } catch (error) {
       console.error('Error adding product:', error);
-      alert('Error adding product. Please try again.');
+      let errorMessage = 'Error adding product. Please try again.';
+      
+      if (typeof error === 'string') {
+        errorMessage = error;
+      } else if (error.message) {
+        errorMessage = error.message;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      
+      setError(errorMessage);
+      
+      const errorString = String(error).toLowerCase();
+      if (errorString.includes('token') || errorString.includes('auth') || errorString.includes('401')) {
+        alert('Your session has expired. Please login again.');
+        // Redirect to login
+        // window.location.href = '/admin/login';
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -161,6 +243,13 @@ const AddProducts = () => {
             <h1 className="text-3xl font-bold text-gray-900">Add New Product</h1>
             <p className="text-gray-600">Fill in the details below to add a new product to your catalog</p>
           </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+              {error}
+            </div>
+          )}
 
           {/* Product Form */}
           <div className="bg-white rounded-xl shadow-md p-6">
@@ -214,13 +303,15 @@ const AddProducts = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Price *</label>
                     <input
-                      type="text"
+                      type="number"
                       name="price"
                       value={productData.price}
                       onChange={handleInputChange}
                       required
+                      step="0.01"
+                      min="0"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016] focus:border-[#104016]"
-                      placeholder="e.g., ₹285,000"
+                      placeholder="e.g., 285000"
                     />
                   </div>
 
@@ -284,9 +375,9 @@ const AddProducts = () => {
 
               {/* Image Upload */}
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4 border-b pb-2">Product Images</h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4 border-b pb-2">Product Images *</h2>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Upload Images</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Upload Images (Max 10 images)</label>
                   <input
                     type="file"
                     multiple
@@ -294,6 +385,7 @@ const AddProducts = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016] focus:border-[#104016]"
                     accept="image/*"
                   />
+                  <p className="text-sm text-gray-500 mt-1">Supported formats: JPG, PNG, WEBP. Max 5MB per image.</p>
                 </div>
                 
                 {productData.images.length > 0 && (
@@ -321,22 +413,37 @@ const AddProducts = () => {
                 )}
               </div>
 
-              {/* Catalogue Upload */}
+              {/* Category Catalogue Upload */}
               <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-4 border-b pb-2">Product Catalogue</h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4 border-b pb-2">Category Catalogue (Optional)</h2>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Upload Catalogue (PDF)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Upload Category Catalogue PDF
+                  </label>
                   <input
                     type="file"
                     onChange={handleCatalogueUpload}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#104016] focus:border-[#104016]"
                     accept=".pdf"
+                    disabled={!productData.category}
                   />
+                  <p className="text-sm text-gray-500 mt-1">
+                    PDF files only. Max 10MB. Select a category first to upload a catalogue for that category.
+                  </p>
                 </div>
                 
-                {productData.catalogue && (
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-600">Selected file: {productData.catalogue.name}</p>
+                {productData.categoryCatalogue && (
+                  <div className="mt-2 flex items-center justify-between">
+                    <p className="text-sm text-gray-600">
+                      Selected file for {productData.category}: {productData.categoryCatalogue.name}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={removeCatalogue}
+                      className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
+                    >
+                      Remove
+                    </button>
                   </div>
                 )}
               </div>

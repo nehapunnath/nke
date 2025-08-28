@@ -1,70 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { AdminSidebar } from '../../components/AdminSidebar';
+import { getAllProducts, deleteProduct, getCategoryCatalogue } from '../../services/productApi';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedCatalogue, setSelectedCatalogue] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteCatalogueModalOpen, setIsDeleteCatalogueModalOpen] = useState(false);
 
-  // Sample product data - in a real app, this would come from an API
+  // Fetch all products on mount
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setProducts([
-        {
-          id: 1,
-          name: 'Dell Precision 7680 Mobile Workstation',
-          brand: 'Dell',
-          category: 'Laptops',
-          price: '₹285,000',
-          modelNo: 'Precision 7680',
-          warranty: '3 Years ProSupport Plus',
-          stockStatus: 'In Stock',
-          description: 'High-performance mobile workstation for professionals.',
-          images: ['https://via.placeholder.com/300x200?text=Dell+Laptop'],
-          specs: ['Processor: 13th Gen Intel® Core™ i9-13950HX', 'RAM: 64GB DDR5', 'Storage: 2TB NVMe SSD']
-        },
-        {
-          id: 2,
-          name: 'HP LaserJet Pro M404n',
-          brand: 'HP',
-          category: 'Printers',
-          price: '₹45,000',
-          modelNo: 'M404n',
-          warranty: '1 Year On-site',
-          stockStatus: 'In Stock',
-          description: 'Monochrome laser printer for office use.',
-          images: ['https://via.placeholder.com/300x200?text=HP+Printer'],
-          specs: ['Print Speed: Up to 40 ppm', 'Resolution: 600 x 600 dpi']
-        },
-        {
-          id: 3,
-          name: 'Epson EB-E01',
-          brand: 'Epson',
-          category: 'Projectors',
-          price: '₹62,000',
-          modelNo: 'EB-E01',
-          warranty: '2 Years',
-          stockStatus: 'Out of Stock',
-          description: 'Portable projector for presentations and home entertainment.',
-          images: ['https://via.placeholder.com/300x200?text=Epson+Projector'],
-          specs: ['Brightness: 3,300 lumens', 'Resolution: XGA (1024 x 768)']
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const response = await getAllProducts();
+        if (response.success) {
+          // Convert Firebase object to array
+          const productsArray = Object.keys(response.products || {}).map(key => ({
+            id: key,
+            ...response.products[key]
+          }));
+          setProducts(productsArray);
+        } else {
+          setError(response.message || 'Failed to fetch products');
         }
-      ]);
-      setLoading(false);
-    }, 1000);
+      } catch (err) {
+        setError(err.message || 'Failed to fetch products');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
-  const handleViewProduct = (product) => {
+  // Fetch catalogue when viewing a product
+  const handleViewProduct = async (product) => {
     setSelectedProduct(product);
     setIsViewModalOpen(true);
+    try {
+      const response = await getCategoryCatalogue(product.category);
+      if (response.success) {
+        setSelectedCatalogue(response.catalogue);
+      } else {
+        setSelectedCatalogue(null);
+      }
+    } catch (err) {
+      setSelectedCatalogue(null);
+    }
   };
 
   const handleEditProduct = (productId) => {
-    // In a real app, this would navigate to an edit page
-    alert(`Edit product with ID: ${productId}`);
+    // Navigate to edit page (e.g., using React Router)
+    window.location.href = `/admin/products/edit/${productId}`;
   };
 
   const handleDeleteProduct = (product) => {
@@ -72,10 +65,39 @@ const AdminProducts = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const confirmDelete = () => {
-    setProducts(products.filter(product => product.id !== selectedProduct.id));
-    setIsDeleteModalOpen(false);
-    setSelectedProduct(null);
+  const confirmDelete = async () => {
+    try {
+      const response = await deleteProduct(selectedProduct.id);
+      if (response.success) {
+        setProducts(products.filter(product => product.id !== selectedProduct.id));
+        setIsDeleteModalOpen(false);
+        setSelectedProduct(null);
+      } else {
+        setError(response.message || 'Failed to delete product');
+      }
+    } catch (err) {
+      setError(err.message || 'Failed to delete product');
+    }
+  };
+
+  const handleDeleteCatalogue = (product) => {
+    setSelectedProduct(product);
+    setIsDeleteCatalogueModalOpen(true);
+  };
+
+  const confirmDeleteCatalogue = async () => {
+    try {
+      const response = await productApi.delete(`/admin/category-catalogue/${encodeURIComponent(selectedProduct.category)}`);
+      if (response.data.success) {
+        setSelectedCatalogue(null);
+        setIsDeleteCatalogueModalOpen(false);
+        setSelectedProduct(null);
+      } else {
+        setError(response.data.message || 'Failed to delete category catalogue');
+      }
+    } catch (err) {
+      setError(err.message || 'Failed to delete category catalogue');
+    }
   };
 
   const getStatusColor = (status) => {
@@ -114,7 +136,7 @@ const AdminProducts = () => {
           <div className="mb-8 flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Product Management</h1>
-              <p className="text-gray-600">Manage your product inventory</p>
+              <p className="text-gray-600">Manage your product inventory and category catalogues</p>
             </div>
             <a 
               href="/admin/products/new" 
@@ -126,6 +148,13 @@ const AdminProducts = () => {
               Add New Product
             </a>
           </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+              {error}
+            </div>
+          )}
 
           {/* Products Table */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
@@ -156,7 +185,7 @@ const AdminProducts = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
-                            <img className="h-10 w-10 rounded-md object-cover" src={product.images[0]} alt={product.name} />
+                            <img className="h-10 w-10 rounded-md object-cover" src={product.images[0]?.url || 'https://via.placeholder.com/300x200?text=No+Image'} alt={product.name} />
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">{product.name}</div>
@@ -168,7 +197,7 @@ const AdminProducts = () => {
                         <div className="text-sm text-gray-900">{product.category}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {product.price}
+                        ₹{parseFloat(product.price).toLocaleString('en-IN')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(product.stockStatus)}`}>
@@ -213,7 +242,7 @@ const AdminProducts = () => {
               <p className="mt-1 text-gray-500">Get started by adding a new product.</p>
               <div className="mt-6">
                 <a
-                  href="/admin/add-product"
+                  href="/admin/products/new"
                   className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#104016] hover:bg-[#2c7744] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#104016]"
                 >
                   Add Product
@@ -242,7 +271,7 @@ const AdminProducts = () => {
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <img src={selectedProduct.images[0]} alt={selectedProduct.name} className="rounded-lg w-full h-64 object-contain" />
+                  <img src={selectedProduct.images[0]?.url || 'https://via.placeholder.com/300x200?text=No+Image'} alt={selectedProduct.name} className="rounded-lg w-full h-64 object-contain" />
                 </div>
                 <div>
                   <h4 className="text-2xl font-bold text-gray-900">{selectedProduct.name}</h4>
@@ -252,7 +281,7 @@ const AdminProducts = () => {
                       {selectedProduct.stockStatus}
                     </span>
                   </div>
-                  <p className="mt-4 text-2xl font-bold text-[#104016]">{selectedProduct.price}</p>
+                  <p className="mt-4 text-2xl font-bold text-[#104016]">₹{parseFloat(selectedProduct.price).toLocaleString('en-IN')}</p>
                   <div className="mt-4">
                     <h5 className="font-medium text-gray-900">Category</h5>
                     <p className="text-gray-600">{selectedProduct.category}</p>
@@ -275,6 +304,30 @@ const AdminProducts = () => {
                   ))}
                 </ul>
               </div>
+              <div>
+                <h5 className="font-medium text-gray-900">Category Catalogue</h5>
+                {selectedCatalogue ? (
+                  <div className="mt-2">
+                    <p className="text-gray-600">File: {selectedCatalogue.catalogue.originalName}</p>
+                    <a
+                      href={selectedCatalogue.catalogue.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-900 underline"
+                    >
+                      View Catalogue
+                    </a>
+                    <button
+                      onClick={() => handleDeleteCatalogue(selectedProduct)}
+                      className="ml-4 text-red-600 hover:text-red-900"
+                    >
+                      Delete Catalogue
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-gray-600">No catalogue available for this category.</p>
+                )}
+              </div>
             </div>
             <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
               <button
@@ -288,7 +341,7 @@ const AdminProducts = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete Product Confirmation Modal */}
       {isDeleteModalOpen && selectedProduct && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50">
           <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
@@ -306,6 +359,34 @@ const AdminProducts = () => {
                 </button>
                 <button
                   onClick={confirmDelete}
+                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                >
+                  Yes, Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Catalogue Confirmation Modal */}
+      {isDeleteCatalogueModalOpen && selectedProduct && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50">
+          <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div className="p-6 text-center">
+              <svg className="mx-auto mb-4 w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+              </svg>
+              <h3 className="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete the catalogue for {selectedProduct.category}?</h3>
+              <div className="flex justify-center space-x-4">
+                <button
+                  onClick={() => setIsDeleteCatalogueModalOpen(false)}
+                  className="px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDeleteCatalogue}
                   className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
                 >
                   Yes, Delete

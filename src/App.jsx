@@ -44,16 +44,16 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/products-details" element={<ProductDetails />} />
+        <Route path="/products-details/:id" element={<ProductDetails />} />
         <Route path="/clients" element={<Clients />} />
 
         {/* Admin Routes */}
         <Route path="/login" element={<Auth />} />
-        <Route path="/admin/dash" element={<AdminDash />} />
+        {/* <Route path="/admin/dash" element={<AdminDash />} /> */}
         <Route path="/admin/products/new" element={<AddProducts />} />
         <Route path="/admin/products" element={<AdminProducts />} />
         <Route path="/admin/products/view" element={<ViewProducts />} />
-        <Route path="/admin/products/edit" element={<EditProducts />} />
+        <Route path="/admin/products/edit/:id" element={<EditProducts />} />
         <Route path="/admin/enquiries" element={<Enquiry />} />
         <Route path="/admin/contacts" element={<AdminContacts />} />
         <Route path="/admin/gallery" element={<AdminGallery />} />

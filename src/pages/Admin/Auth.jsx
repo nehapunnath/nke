@@ -65,7 +65,7 @@ const Auth = () => {
       localStorage.setItem('token', response.token);
 
       // Redirect to dashboard
-      navigate('/admin/dash');
+      navigate('/admin/products');
     } catch (error) {
       setErrors({ submit: error });
     } finally {

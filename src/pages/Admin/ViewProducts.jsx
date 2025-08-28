@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AdminSidebar } from '../../components/AdminSidebar';
+import { getAllProducts, deleteProduct } from '../../services/productApi';
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);
@@ -7,8 +9,11 @@ const ViewProducts = () => {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  // Sample categories (same as in AddProducts)
+  // Categories (same as in EditProducts.jsx)
   const categories = [
     'Desktops',
     'Laptops',
@@ -21,51 +26,39 @@ const ViewProducts = () => {
     'Accessories'
   ];
 
-  // Sample data - in a real app, this would come from an API
+  // Fetch products from API
   useEffect(() => {
-    // Mock data fetch
-    const mockProducts = [
-      {
-        id: 1,
-        name: 'Dell Precision 7680 Mobile Workstation',
-        brand: 'Dell',
-        category: 'Laptops',
-        price: '₹285,000',
-        modelNo: 'Precision 7680',
-        warranty: '3 Years ProSupport Plus',
-        stockStatus: 'In Stock',
-        description: 'High-performance mobile workstation for professionals.',
-        images: ['/sample-laptop.jpg'],
-        specs: [
-          'Processor: 13th Gen Intel® Core™ i9-13950HX',
-          'RAM: 64GB DDR5',
-          'Storage: 2TB NVMe SSD',
-          'Graphics: NVIDIA RTX 5000 Ada Generation'
-        ],
-        catalogue: '/sample-catalogue.pdf'
-      },
-      {
-        id: 2,
-        name: 'HP EliteDesk 800 G5',
-        brand: 'HP',
-        category: 'Desktops',
-        price: '₹125,000',
-        modelNo: 'EliteDesk 800 G5',
-        warranty: '3 Years On-site Service',
-        stockStatus: 'In Stock',
-        description: 'Compact desktop for business use.',
-        images: ['/sample-desktop.jpg'],
-        specs: [
-          'Processor: Intel Core i7-9700',
-          'RAM: 32GB DDR4',
-          'Storage: 1TB SSD + 1TB HDD',
-          'Graphics: Integrated Intel UHD Graphics 630'
-        ],
-        catalogue: '/sample-catalogue2.pdf'
+    const fetchProducts = async () => {
+      try {
+        setIsLoading(true);
+        setError('');
+        const response = await getAllProducts();
+        if (response.success) {
+          // Convert Firebase object to array with IDs
+          const productsArray = response.products
+            ? Object.keys(response.products).map(id => ({
+                id,
+                ...response.products[id]
+              }))
+            : [];
+          setProducts(productsArray);
+        } else {
+          setError(response.message || 'Failed to fetch products');
+        }
+      } catch (err) {
+        console.error('Error fetching products:', err);
+        setError(err.message || 'Failed to fetch products');
+        if (err.message?.toLowerCase().includes('token') || err.message?.includes('401')) {
+          alert('Your session has expired. Please login again.');
+          navigate('/admin/login');
+        }
+      } finally {
+        setIsLoading(false);
       }
-    ];
-    setProducts(mockProducts);
-  }, []);
+    };
+
+    fetchProducts();
+  }, [navigate]);
 
   // Filter products based on search term and category
   const filteredProducts = products.filter(product => {
@@ -87,11 +80,45 @@ const ViewProducts = () => {
     setSelectedProduct(null);
   };
 
-  const deleteProduct = (productId) => {
+  const handleDeleteProduct = async (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
-      setProducts(products.filter(product => product.id !== productId));
+      try {
+        setError('');
+        const response = await deleteProduct(productId);
+        if (response.success) {
+          setProducts(products.filter(product => product.id !== productId));
+          alert('Product deleted successfully!');
+        } else {
+          setError(response.message || 'Failed to delete product');
+        }
+      } catch (err) {
+        console.error('Error deleting product:', err);
+        setError(err.message || 'Failed to delete product');
+        if (err.message?.toLowerCase().includes('token') || err.message?.includes('401')) {
+          alert('Your session has expired. Please login again.');
+          navigate('/admin/login');
+        }
+      }
     }
   };
+
+  const handleEditProduct = (productId) => {
+    navigate(`/admin/products/edit/${productId}`);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen bg-gray-100">
+        <AdminSidebar />
+        <main className="flex-1 overflow-auto p-6 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#104016] mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading products...</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -106,6 +133,13 @@ const ViewProducts = () => {
             <h1 className="text-3xl font-bold text-gray-900">View Products</h1>
             <p className="text-gray-600">Manage and view all products in your catalog</p>
           </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+              {error}
+            </div>
+          )}
 
           {/* Filters and Search */}
           <div className="bg-white rounded-xl shadow-md p-6 mb-6">
@@ -183,7 +217,11 @@ const ViewProducts = () => {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-10 w-10">
-                              <img className="h-10 w-10 object-contain" src={product.images[0]} alt={product.name} />
+                              <img
+                                className="h-10 w-10 object-contain"
+                                src={product.images && product.images[0]?.url}
+                                alt={product.name}
+                              />
                             </div>
                             <div className="ml-4">
                               <div className="text-sm font-medium text-gray-900">{product.name}</div>
@@ -195,7 +233,7 @@ const ViewProducts = () => {
                           {product.category}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {product.price}
+                          ₹{product.price.toLocaleString('en-IN')}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
@@ -213,7 +251,13 @@ const ViewProducts = () => {
                             View
                           </button>
                           <button
-                            onClick={() => deleteProduct(product.id)}
+                            onClick={() => handleEditProduct(product.id)}
+                            className="text-blue-600 hover:text-blue-900 mr-3"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteProduct(product.id)}
                             className="text-red-600 hover:text-red-900"
                           >
                             Delete
@@ -251,14 +295,18 @@ const ViewProducts = () => {
                 <div>
                   <h3 className="text-lg font-medium text-gray-900 mb-2">Images</h3>
                   <div className="grid grid-cols-2 gap-4">
-                    {selectedProduct.images.map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt={`${selectedProduct.name} ${index + 1}`}
-                        className="w-full h-48 object-contain border rounded-md"
-                      />
-                    ))}
+                    {selectedProduct.images && selectedProduct.images.length > 0 ? (
+                      selectedProduct.images.map((image, index) => (
+                        <img
+                          key={index}
+                          src={image.url}
+                          alt={`${selectedProduct.name} ${index + 1}`}
+                          className="w-full h-48 object-contain border rounded-md"
+                        />
+                      ))
+                    ) : (
+                      <p className="text-gray-500">No images available</p>
+                    )}
                   </div>
                 </div>
 
@@ -276,7 +324,7 @@ const ViewProducts = () => {
                       <span className="font-medium">Category:</span> {selectedProduct.category}
                     </div>
                     <div>
-                      <span className="font-medium">Price:</span> {selectedProduct.price}
+                      <span className="font-medium">Price:</span> ₹{selectedProduct.price.toLocaleString('en-IN')}
                     </div>
                     <div>
                       <span className="font-medium">Model No:</span> {selectedProduct.modelNo}
@@ -306,30 +354,30 @@ const ViewProducts = () => {
               {/* Specifications */}
               <div className="mt-6">
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Specifications</h3>
-                <ul className="list-disc list-inside space-y-1">
-                  {selectedProduct.specs.map((spec, index) => (
-                    <li key={index} className="text-gray-700">{spec}</li>
-                  ))}
-                </ul>
+                {selectedProduct.specs && selectedProduct.specs.length > 0 ? (
+                  <ul className="list-disc list-inside space-y-1">
+                    {selectedProduct.specs.map((spec, index) => (
+                      <li key={index} className="text-gray-700">{spec}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-500">No specifications available</p>
+                )}
               </div>
 
               {/* Catalogue */}
-              {selectedProduct.catalogue && (
-                <div className="mt-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Catalogue</h3>
-                  <a
-                    href={selectedProduct.catalogue}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#104016] hover:text-[#2c7744] underline"
-                  >
-                    View Catalogue (PDF)
-                  </a>
-                </div>
-              )}
+              <div className="mt-6">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Catalogue</h3>
+                <button
+                  onClick={() => navigate(`/category-catalogue/${encodeURIComponent(selectedProduct.category)}`)}
+                  className="text-[#104016] hover:text-[#2c7744] underline"
+                >
+                  View Catalogue
+                </button>
+              </div>
 
               {/* Action Buttons */}
-              {/* <div className="mt-6 flex justify-end space-x-3">
+              <div className="mt-6 flex justify-end space-x-3">
                 <button
                   onClick={closeProductDetails}
                   className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
@@ -337,15 +385,12 @@ const ViewProducts = () => {
                   Close
                 </button>
                 <button
-                  onClick={() => {
-                    // In a real app, this would navigate to an edit form
-                    alert('Edit functionality would open here');
-                  }}
+                  onClick={() => handleEditProduct(selectedProduct.id)}
                   className="px-4 py-2 bg-[#104016] text-white rounded-md hover:bg-[#2c7744] transition-colors"
                 >
                   Edit Product
                 </button>
-              </div> */}
+              </div>
             </div>
           </div>
         </div>
